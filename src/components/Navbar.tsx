@@ -10,6 +10,7 @@ import NewFillIcon from './ui/icons/NewFillIcon';
 import { usePathname } from 'next/navigation';
 import ColorButton from './ui/ColorButton';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Avatar from './Avatar';
 
 const menu = [
   {
@@ -32,7 +33,10 @@ const menu = [
 
 export default function Navbar() {
   const pathName = usePathname();
+
+  // 클라이언트 컴포넌트에서 로그인된 사용자의 정보를 가져옴
   const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <div className="flex justify-between items-center px-6">
@@ -50,11 +54,20 @@ export default function Navbar() {
               </li>
             );
           })}
-          {session ? (
-            <ColorButton text="Sign out" onClick={() => signOut()} />
-          ) : (
-            <ColorButton text="Sign in" onClick={() => signIn()} />
+          {user && (
+            <li>
+              <Link href={`/user/${user.username}`}>
+                <Avatar image={user.image} />
+              </Link>
+            </li>
           )}
+          <li>
+            {session ? (
+              <ColorButton text="Sign out" onClick={() => signOut()} />
+            ) : (
+              <ColorButton text="Sign in" onClick={() => signIn()} />
+            )}
+          </li>
         </ul>
       </nav>
     </div>

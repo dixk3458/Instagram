@@ -11,12 +11,12 @@ type Props = {
 
 export default function Signin({ providers, callbackUrl }: Props) {
   return (
-    <section className="flex justify-center mt-[30%]">
+    <section className="flex justify-center mt-24">
       {Object.values(providers).map(({ name, id }) => (
         <ColorButton
           key={id}
           text={`Sign In With ${name}`}
-          onClick={() => signIn(id, { callbackUrl })}
+          onClick={() => signIn(id, { callbackUrl }, { prompt: 'login' })}
           size="big"
         />
       ))}
