@@ -10,13 +10,19 @@ export default function SideBar({
 }: Props) {
   return (
     <>
-      <div>
+      <div className="flex items-center">
         {image && <Avatar image={image} />}
-        <p>{userid}</p>
-        <p>{name}</p>
+        <div className="ml-4">
+          <p className="font-bold">{userid}</p>
+          <p className="text-lg text-neutral-500 leading-4">{name}</p>
+        </div>
       </div>
-      <p>About • Help • API • jobs • Privacy • Terms • Location • Language</p>
-      <p>© 2023 Jaewoong Jeong. All Rights Reserved.</p>
+      <p className="text-sm text-neutral-500 mt-8">
+        About • Help • API • jobs • Privacy • Terms • Location • Language
+      </p>
+      <p className="text-sm text-neutral-500 font-bold mt-8">
+        © 2023 Jaewoong Jeong. All Rights Reserved.
+      </p>
     </>
   );
 }
