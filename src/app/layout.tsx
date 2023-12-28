@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
-import AuthContext from '@/context/Authcontext';
+import SWRConfigContext from '@/context/SWRConfigContext';
+import AuthContext from '@/context/AuthContext';
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
           <header className="sticky top-0 z-10 bg-transparent">
             <Navbar />
           </header>
-          <main>{children}</main>
+          <main>
+            <SWRConfigContext>{children}</SWRConfigContext>
+          </main>
         </AuthContext>
       </body>
     </html>
