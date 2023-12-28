@@ -4,7 +4,7 @@ import type {
 } from 'next';
 import { getProviders, signIn } from 'next-auth/react';
 import { getServerSession } from 'next-auth/next';
-import { handler } from '../../api/auth/[...nextauth]/route';
+import { authOptions } from '../../api/auth/[...nextauth]/route';
 import Signin from '@/components/Signin';
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ type Props = {
 export default async function SignInPage({
   searchParams: { callbackUrl },
 }: Props) {
-  const session = await getServerSession(handler);
+  const session = await getServerSession(authOptions);
 
   // 만약 유저가 이미 있다면 redirect
   // 서버 측에서 필요한 정보를 받음
