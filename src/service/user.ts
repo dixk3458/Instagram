@@ -22,10 +22,3 @@ export async function addUser({ id, userid, name, email, image }: OAuthUser) {
     bookmarks: [],
   });
 }
-
-const doc = {
-  _id: 'my-bike',
-  _type: 'bike',
-  name: 'Sanity Tandem Extraordinaire',
-  seats: 2,
-};
