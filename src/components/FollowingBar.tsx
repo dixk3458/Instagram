@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PropagateLoader } from 'react-spinners';
 import useSWR from 'swr';
 import Avatar from './Avatar';
+import ScrollableBar from './ui/ScrollableBar';
 
 export default function FollowingBar() {
   // 1. 클라이언트 컴포넌트에서 백엔드에게 api/me 사용자의 정보를 얻어옴
@@ -24,23 +25,22 @@ export default function FollowingBar() {
         (!users || users.length === 0) && <p>{`You don't have following`}</p>
       )}
       {users && users.length > 0 && (
-        <ul className="w-full flex items-center gap-2">
+        <ScrollableBar>
           {users.map(({ userid, image }) => {
             return (
-              <li key={userid}>
-                <Link
-                  href={`/user/${userid}`}
-                  className="flex flex-col justify-center items-center w-20"
-                >
-                  <Avatar image={image} hightlight={true} />
-                  <p className="w-full text-sm text-ellipsis overflow-hidden">
-                    {userid}
-                  </p>
-                </Link>
-              </li>
+              <Link
+                key={userid}
+                href={`/user/${userid}`}
+                className="flex flex-col justify-center items-center w-20"
+              >
+                <Avatar image={image} hightlight={true} />
+                <p className="w-full text-sm text-ellipsis overflow-hidden">
+                  {userid}
+                </p>
+              </Link>
             );
           })}
-        </ul>
+        </ScrollableBar>
       )}
     </section>
   );
