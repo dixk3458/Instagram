@@ -1,10 +1,9 @@
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { authOptions } from '../auth/[...nextauth]/route';
-import user from '../../../../sanity-studio/schemas/user';
 import { getUserByUserId } from '@/service/user';
 
-export async function GET(request: Request) {
+export async function GET() {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
