@@ -17,19 +17,25 @@ export default function FollowingBar() {
 
   const users = data?.following;
   return (
-    <section>
+    <section className="w-full flex justify-center items-center p-4 shadow-sm shadow-neutral-300 mb-4 min-h-[90px] rounded-lg overflow-x-auto">
       {loading ? (
         <PropagateLoader size={8} color="orange" />
       ) : (
         (!users || users.length === 0) && <p>{`You don't have following`}</p>
       )}
       {users && users.length > 0 && (
-        <ul>
+        <ul className="w-full flex items-center gap-2">
           {users.map(({ userid, image }) => {
             return (
               <li key={userid}>
-                <Link href={`/user/${userid}`}>
+                <Link
+                  href={`/user/${userid}`}
+                  className="flex flex-col justify-center items-center w-20"
+                >
                   <Avatar image={image} hightlight={true} />
+                  <p className="w-full text-sm text-ellipsis overflow-hidden">
+                    {userid}
+                  </p>
                 </Link>
               </li>
             );
