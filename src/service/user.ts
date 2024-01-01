@@ -32,3 +32,19 @@ export async function getUserByUserId(userid: string) {
     "bookmarks":bookmarks[]->_id
   }`);
 }
+
+export async function searchUser(keyword?: string) {
+  // 키워드가 있냐 없냐에 따라 query가 달라지기 때문에 처리를 해주자.
+
+  const query = keyword
+    ? `&& (name match "${keyword}") || (userid match "${keyword}")`
+    : '';
+
+  return client.fetch(`
+    *[_type == "user" ${query}]{
+      ...,
+      "following":count(following),
+      "follower":count(follower)
+    }
+  `);
+}
