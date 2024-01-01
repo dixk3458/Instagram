@@ -36,3 +36,21 @@ export async function getFollowingPostsOf(userid: string) {
         }))
     );
 }
+
+export async function getPost(id: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && _id == "${id}"][0]{
+      ...,
+      "userid":author->userid,
+      "userImage":author->userImage,
+      "image":photo,
+      "likes":likes[]->userid,
+      comments[]{comment,"userid":author->userid,"image":author->image},
+      "id":_id,
+      "createdAt":_createAt
+    }
+    `
+    )
+    .then(post => ({ ...post, image: urlFor(post.image) }));
+}
