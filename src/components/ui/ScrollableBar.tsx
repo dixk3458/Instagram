@@ -18,7 +18,6 @@ const responsive = {
 };
 
 export default function ScrollableBar({ children }: Props) {
-  console.log(children);
   return (
     <Carousel
       swipeable={true}
