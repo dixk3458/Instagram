@@ -13,7 +13,7 @@ export default function SWRConfigContext({ children }: Props) {
         fetcher: (url: string) => fetch(url).then(res => res.json()),
       }}
     >
-      {children};
+      {children}
     </SWRConfig>
   );
 }
