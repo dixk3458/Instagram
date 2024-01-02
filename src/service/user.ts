@@ -1,5 +1,7 @@
 import { User } from 'next-auth';
 import { client } from './sanity';
+import user from '../../sanity-studio/schemas/user';
+import { ProfileUser } from '@/models/user';
 
 type OAuthUser = {
   id: string;
@@ -40,11 +42,23 @@ export async function searchUser(keyword?: string) {
     ? `&& (name match "${keyword}") || (userid match "${keyword}")`
     : '';
 
-  return client.fetch(`
+  return client
+    .fetch(
+      `
     *[_type == "user" ${query}]{
       ...,
       "following":count(following),
       "follower":count(follower)
     }
-  `);
+  `
+    )
+    .then(users =>
+      users.map((user: ProfileUser) => {
+        return {
+          ...user,
+          follower: user.follower ?? 0,
+          following: user.following ?? 0,
+        };
+      })
+    );
 }

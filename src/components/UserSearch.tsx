@@ -4,6 +4,7 @@ import { ProfileUser } from '@/models/user';
 import { FormEvent, useState } from 'react';
 import useSWR from 'swr';
 import GridSpinner from './ui/GridSpinner';
+import UserCard from './UserCard';
 
 export default function UserSearch() {
   // /api/search/${keyword}
@@ -22,9 +23,10 @@ export default function UserSearch() {
   };
 
   return (
-    <>
-      <form onSubmit={e => onSubmit(e)}>
+    <section className="w-full max-w-2xl my-4 flex flex-col items-center">
+      <form className="w-full mb-4" onSubmit={e => onSubmit(e)}>
         <input
+          className="w-full text-xl p-3 outline-none border border-gray-400"
           type="text"
           autoFocus
           placeholder="Search for a username or name"
@@ -37,16 +39,16 @@ export default function UserSearch() {
       {!loading && !error && users?.length === 0 && (
         <p>찾는 사용자가 없습니다.</p>
       )}
-      <ul>
+      <ul className="w-full p-4">
         {users &&
           users.map(user => {
             return (
               <li key={user.userid}>
-                <p>{user.userid}</p>
+                <UserCard user={user} />
               </li>
             );
           })}
       </ul>
-    </>
+    </section>
   );
 }
