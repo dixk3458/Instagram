@@ -1,7 +1,7 @@
 import { User } from 'next-auth';
 import { client } from './sanity';
 import user from '../../sanity-studio/schemas/user';
-import { ProfileUser } from '@/models/user';
+import { SearchUser } from '@/models/user';
 
 type OAuthUser = {
   id: string;
@@ -53,7 +53,7 @@ export async function searchUser(keyword?: string) {
   `
     )
     .then(users =>
-      users.map((user: ProfileUser) => {
+      users.map((user: SearchUser) => {
         return {
           ...user,
           follower: user.follower ?? 0,
@@ -61,4 +61,27 @@ export async function searchUser(keyword?: string) {
         };
       })
     );
+}
+
+export async function getUserForProfile(userid: string) {
+  // Sanity로부터 정보를 가져오면된다.
+
+  return client
+    .fetch(
+      `
+    *[_type == "user" && userid == "${userid}"][0]{
+      ...,
+      "id":_id,
+      "following":count(following),
+      "follower":count(follower),
+      "posts":count(*[_type == "post" && author->userid == "${userid}"])
+    }
+  `
+    )
+    .then(user => ({
+      ...user,
+      following: user.following ?? 0,
+      follower: user.followers ?? 0,
+      posts: user.posts ?? 0,
+    }));
 }
