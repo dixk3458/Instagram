@@ -26,15 +26,7 @@ export async function getFollowingPostsOf(userid: string) {
             || author._ref in *[_type == "user" && userid == "${userid}"].following[]._ref]
             | order(_createdAt desc){${simplePostProjection}}`
     )
-    .then(
-      (
-        posts // 데이터(posts)를 잘 받았으면 원하는 형태로 제가공
-      ) =>
-        posts.map((post: SimplePost) => ({
-          ...post,
-          image: urlFor(post.image),
-        }))
-    );
+    .then(posts => mapPosts(posts));
 }
 
 export async function getPost(id: string) {
@@ -46,11 +38,54 @@ export async function getPost(id: string) {
       "userImage":author->userImage,
       "image":photo,
       "likes":likes[]->userid,
-      comments[]{comment,"userid":author->userid,"image":author->image},
+      "comments":comments[]{comment,"userid":author->userid,"image":author->image},
       "id":_id,
       "createdAt":_createAt
     }
     `
     )
     .then(post => ({ ...post, image: urlFor(post.image) }));
+}
+
+export async function getPostsOf(userid: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && author->userid == "${userid}"]
+    | order(_createdAt desc){
+      ${simplePostProjection}
+    }
+    `
+    )
+    .then(posts => mapPosts(posts));
+}
+
+export async function getLikedPostsOf(userid: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && ${userid} in likeds[]->userid]
+    | order(_createdAt desc){
+      ${simplePostProjection}
+    }
+    `
+    )
+    .then(posts => mapPosts(posts));
+}
+
+export async function getSavedPostsOf(userid: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && _id in *[_type == "user" && userid == "${userid}"].bookmarks[]._ref]
+    | order(_createdAt desc){
+      ${simplePostProjection}
+    }
+    `
+    )
+    .then(posts => mapPosts(posts));
+}
+
+function mapPosts(posts: SimplePost[]) {
+  return posts.map((post: SimplePost) => ({
+    ...post,
+    image: urlFor(post.image),
+  }));
 }

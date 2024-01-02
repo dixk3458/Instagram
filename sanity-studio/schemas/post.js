@@ -16,7 +16,7 @@ export default {
     },
     {
       title: 'Text',
-      name: 'next',
+      name: 'text',
       type: 'string',
     },
     {
