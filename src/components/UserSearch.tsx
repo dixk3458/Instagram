@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react';
 import useSWR from 'swr';
 import GridSpinner from './ui/GridSpinner';
 import UserCard from './UserCard';
+import useDebounce from '@/hooks/debounce';
 
 export default function UserSearch() {
   // /api/search/${keyword}
@@ -12,11 +13,20 @@ export default function UserSearch() {
   // 없다면 모든 사용자 받아오자
 
   const [keyword, setKeyword] = useState('');
+
+  // Debounce 구현
+  const debouncedKeyword = useDebounce(
+    keyword.includes('*')
+      ? keyword.replace(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/, '')
+      : keyword,
+    1000
+  );
+
   const {
     data: users,
     isLoading: loading,
     error,
-  } = useSWR<ProfileUser[]>(`/api/search/${keyword}`);
+  } = useSWR<ProfileUser[]>(`/api/search/${debouncedKeyword}`);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
