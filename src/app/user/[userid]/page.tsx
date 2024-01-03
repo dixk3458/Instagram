@@ -21,9 +21,9 @@ export default async function UserPage({ params: { userid } }: Props) {
   // user가 있다면 user를 보여주는 컴포넌트
 
   return (
-    <>
+    <section className="w-full">
       <UserProfile user={user} />
       <UserPosts user={user} />
-    </>
+    </section>
   );
 }
